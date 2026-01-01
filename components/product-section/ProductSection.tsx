@@ -124,16 +124,16 @@ const ProductSection: React.FC = () => {
   }, [hoverTimer]);
 
   return (
-    <section id="products" className="min-h-screen bg-black py-20">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-playfair font-bold text-primary mb-6">
+    <section id="products" className="min-h-screen bg-black py-12 sm:py-16 md:py-20">
+      <div className="container mx-auto px-4 sm:px-6 md:px-4 lg:px-8">
+        <div className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-primary mb-4 sm:mb-6">
             Explore by Category
           </h2>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1">
+        <div className="grid lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+          <div className="lg:col-span-1 hidden lg:block">
             <Card className="bg-white">
               <CardHeader>
                 <div className="relative">
@@ -153,7 +153,7 @@ const ProductSection: React.FC = () => {
                     key={category.id}
                     onClick={() => setActiveCategory(category.filterValue)}
                     variant={activeCategory === category.filterValue ? "default" : "ghost"}
-                    className={`w-full justify-start ${
+                    className={`w-full justify-start text-sm ${
                       activeCategory === category.filterValue
                         ? "bg-primary text-white"
                         : "text-gray-700 hover:bg-gray-100"
@@ -180,14 +180,44 @@ const ProductSection: React.FC = () => {
             </Card>
           </div>
 
-          <div className="lg:col-span-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-3 lg:col-start-2 lg:col-end-5">
+            <div className="mb-4 lg:hidden">
+              <div className="relative">
+                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 bg-white border border-gray-300 focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              <div className="flex flex-wrap gap-2 mt-3">
+                {categories.map((category) => (
+                  <Button
+                    key={category.id}
+                    onClick={() => setActiveCategory(category.filterValue)}
+                    variant={activeCategory === category.filterValue ? "default" : "outline"}
+                    size="sm"
+                    className={`flex-shrink-0 ${
+                      activeCategory === category.filterValue
+                        ? "bg-primary text-white"
+                        : ""
+                    }`}
+                  >
+                    {category.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
               {filteredProducts.map((product) => (
                 <Card
                   key={product.id}
                   className="relative bg-gray-200 overflow-hidden cursor-pointer group border-0"
                   onMouseEnter={() => handleProductHover(product.id)}
                   onMouseLeave={handleProductLeave}
+                  onClick={() => handleEnquire(product)}
                 >
                   <div className="aspect-square relative">
                     <Image
@@ -199,13 +229,16 @@ const ProductSection: React.FC = () => {
                   </div>
 
                   {hoveredProduct === product.id && (
-                    <div className="absolute inset-0 bg-black/80 flex items-center justify-center animate-fade-in">
+                    <div className="hidden md:flex absolute inset-0 bg-black/80 items-center justify-center animate-fade-in">
                       <div className="text-center space-y-4 p-4">
-                        <h3 className="text-white text-xl font-bold">{product.name}</h3>
-                        <p className="text-white/80 text-sm">{product.description}</p>
+                        <h3 className="text-white text-lg sm:text-xl font-bold">{product.name}</h3>
+                        <p className="text-white/80 text-xs sm:text-sm">{product.description}</p>
                         <p className="text-white font-semibold">{product.price}</p>
                         <Button
-                          onClick={() => handleEnquire(product)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEnquire(product);
+                          }}
                           className="bg-blue-500 hover:bg-blue-600 animate-scale-in"
                         >
                           Enquire
@@ -214,10 +247,10 @@ const ProductSection: React.FC = () => {
                     </div>
                   )}
 
-                  <CardContent className="p-4">
-                    <CardTitle className="text-lg font-semibold text-gray-800 mb-2">{product.name}</CardTitle>
-                    <CardDescription className="text-gray-600 text-sm mb-2">{product.description}</CardDescription>
-                    <p className="text-primary font-bold">{product.price}</p>
+                  <CardContent className="p-3 sm:p-4">
+                    <CardTitle className="text-base sm:text-lg font-semibold text-gray-800 mb-1 sm:mb-2">{product.name}</CardTitle>
+                    <CardDescription className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2 line-clamp-2">{product.description}</CardDescription>
+                    <p className="text-primary font-bold text-sm sm:text-base">{product.price}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -225,44 +258,6 @@ const ProductSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="block lg:hidden mt-12">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-playfair font-bold text-primary mb-4">
-              Popular Products
-            </h3>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {filteredProducts.slice(0, 6).map((product) => (
-              <Card
-                key={product.id}
-                className="bg-gray-200 overflow-hidden cursor-pointer group border-0"
-                onClick={() => handleEnquire(product)}
-              >
-                <div className="aspect-square relative">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-                <CardContent className="p-3">
-                  <CardTitle className="text-sm font-semibold text-gray-800 mb-1">{product.name}</CardTitle>
-                  <CardDescription className="text-xs text-gray-600 mb-1">Light single chair</CardDescription>
-                  <p className="text-primary font-bold text-sm">{product.price}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="flex justify-center mt-6">
-            <Button className="bg-green-500 hover:bg-green-600 text-white">
-              <span>Explore all items</span>
-              <FaArrowRight />
-            </Button>
-          </div>
-        </div>
       </div>
     </section>
   );

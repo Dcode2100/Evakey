@@ -65,16 +65,24 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        <button
-          className={`${styles.mobileMenuButton} ${menuActive ? styles.active : ""}`}
-          onClick={() => setMenuActive(!menuActive)}
-          type="button"
-          aria-label="Toggle menu"
-        >
-          <div className={styles.line}></div>
-          <div className={styles.line}></div>
-          <div className={styles.line}></div>
-        </button>
+        <div className={styles.mobileRightSection}>
+          <button 
+            onClick={() => handleNavClick(navItems.find(item => item.path === "#products") || navItems[1])}
+            className={styles.mobileShopButton}
+          >
+            Shop Now
+          </button>
+          <button
+            className={`${styles.mobileMenuButton} ${menuActive ? styles.active : ""}`}
+            onClick={() => setMenuActive(!menuActive)}
+            type="button"
+            aria-label="Toggle menu"
+          >
+            <div className={styles.line}></div>
+            <div className={styles.line}></div>
+            <div className={styles.line}></div>
+          </button>
+        </div>
       </div>
 
       <div className={`${styles.mobileMenu} ${menuActive ? styles.open : ""}`}>
