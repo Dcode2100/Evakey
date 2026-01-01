@@ -5,7 +5,7 @@ import BenefitsSection from "@/components/benefits-section/BenefitsSection";
 import TestimonialsSection from "@/components/testimonials-section/TestimonialsSection";
 import Footer from "@/components/footer/Footer";
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <div className="flex flex-col">
       <HeroSection/>

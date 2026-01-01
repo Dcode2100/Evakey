@@ -2,14 +2,32 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaSearch, FaChevronUp, FaChevronDown, FaArrowRight } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-const ProductSection = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [hoveredProduct, setHoveredProduct] = useState(null);
-  const [hoverTimer, setHoverTimer] = useState(null);
+interface Category {
+  id: string;
+  name: string;
+  filterValue: string;
+}
 
-  const categories = [
+interface Product {
+  id: number;
+  name: string;
+  category: string;
+  image: string;
+  description: string;
+  price: string;
+}
+
+const ProductSection: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+  const [hoverTimer, setHoverTimer] = useState<NodeJS.Timeout | null>(null);
+
+  const categories: Category[] = [
     { id: "all", name: "All Products", filterValue: "all" },
     { id: "keychains", name: "Keychains", filterValue: "keychain" },
     { id: "bags", name: "Bags", filterValue: "bag" },
@@ -19,7 +37,7 @@ const ProductSection = () => {
     { id: "tech", name: "Tech Items", filterValue: "tech" }
   ];
 
-  const products = [
+  const products: Product[] = [
     {
       id: 1,
       name: "Custom Logo Keychain",
@@ -77,7 +95,7 @@ const ProductSection = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const handleProductHover = (productId) => {
+  const handleProductHover = (productId: number) => {
     if (hoverTimer) clearTimeout(hoverTimer);
     
     const timer = setTimeout(() => {
@@ -92,7 +110,7 @@ const ProductSection = () => {
     setHoveredProduct(null);
   };
 
-  const handleEnquire = (product) => {
+  const handleEnquire = (product: Product) => {
     const message = `Hey there, I want to enquire about the product ${product.name}. Product details: ${product.description}`;
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "8104780513";
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
@@ -116,56 +134,58 @@ const ProductSection = () => {
 
         <div className="grid lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg p-6 space-y-6">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 pl-12 bg-gray-100 rounded-lg border-0 focus:ring-2 focus:ring-primary focus:outline-none"
-                />
-                <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              </div>
-
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+            <Card className="bg-white">
+              <CardHeader>
+                <div className="relative">
+                  <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 bg-gray-100 border-0 focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-2 max-h-96 overflow-y-auto">
                 {categories.map((category) => (
-                  <button
+                  <Button
                     key={category.id}
                     onClick={() => setActiveCategory(category.filterValue)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                    variant={activeCategory === category.filterValue ? "default" : "ghost"}
+                    className={`w-full justify-start ${
                       activeCategory === category.filterValue
                         ? "bg-primary text-white"
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
                   >
                     {category.name}
-                  </button>
+                  </Button>
                 ))}
-              </div>
-
-              <div className="flex justify-center space-x-2">
-                <button className="w-8 h-8 bg-white border border-gray-300 rounded-full flex items-center justify-center hover:bg-gray-50">
-                  <FaChevronUp className="text-gray-600" />
-                </button>
-                <button className="w-8 h-8 bg-pink-200 border border-pink-300 rounded-full flex items-center justify-center hover:bg-pink-100">
-                  <FaChevronDown className="text-pink-600" />
-                </button>
-              </div>
-
-              <button className="w-full bg-primary text-white py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2">
-                <span>All Categories</span>
-                <FaArrowRight />
-              </button>
-            </div>
+              </CardContent>
+              <CardFooter className="flex flex-col space-y-4">
+                <div className="flex justify-center space-x-2">
+                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-full">
+                    <FaChevronUp className="text-gray-600" />
+                  </Button>
+                  <Button variant="outline" size="icon" className="w-8 h-8 rounded-full bg-pink-200 border-pink-300 hover:bg-pink-100">
+                    <FaChevronDown className="text-pink-600" />
+                  </Button>
+                </div>
+                <Button className="w-full bg-primary text-white hover:bg-primary/90">
+                  <span>All Categories</span>
+                  <FaArrowRight />
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
 
           <div className="lg:col-span-3">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div
+                <Card
                   key={product.id}
-                  className="relative bg-gray-200 rounded-lg overflow-hidden cursor-pointer group"
+                  className="relative bg-gray-200 overflow-hidden cursor-pointer group border-0"
                   onMouseEnter={() => handleProductHover(product.id)}
                   onMouseLeave={handleProductLeave}
                 >
@@ -180,26 +200,26 @@ const ProductSection = () => {
 
                   {hoveredProduct === product.id && (
                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center animate-fade-in">
-                      <div className="text-center space-y-4">
+                      <div className="text-center space-y-4 p-4">
                         <h3 className="text-white text-xl font-bold">{product.name}</h3>
-                        <p className="text-white/80 text-sm px-4">{product.description}</p>
+                        <p className="text-white/80 text-sm">{product.description}</p>
                         <p className="text-white font-semibold">{product.price}</p>
-                        <button
+                        <Button
                           onClick={() => handleEnquire(product)}
-                          className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors animate-scale-in"
+                          className="bg-blue-500 hover:bg-blue-600 animate-scale-in"
                         >
                           Enquire
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   )}
 
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{product.name}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{product.description}</p>
+                  <CardContent className="p-4">
+                    <CardTitle className="text-lg font-semibold text-gray-800 mb-2">{product.name}</CardTitle>
+                    <CardDescription className="text-gray-600 text-sm mb-2">{product.description}</CardDescription>
                     <p className="text-primary font-bold">{product.price}</p>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
@@ -214,9 +234,9 @@ const ProductSection = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {filteredProducts.slice(0, 6).map((product) => (
-              <div
+              <Card
                 key={product.id}
-                className="bg-gray-200 rounded-lg overflow-hidden cursor-pointer group"
+                className="bg-gray-200 overflow-hidden cursor-pointer group border-0"
                 onClick={() => handleEnquire(product)}
               >
                 <div className="aspect-square relative">
@@ -227,20 +247,20 @@ const ProductSection = () => {
                     className="object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
-                <div className="p-3">
-                  <h3 className="text-sm font-semibold text-gray-800 mb-1">{product.name}</h3>
-                  <p className="text-xs text-gray-600 mb-1">Light single chair</p>
+                <CardContent className="p-3">
+                  <CardTitle className="text-sm font-semibold text-gray-800 mb-1">{product.name}</CardTitle>
+                  <CardDescription className="text-xs text-gray-600 mb-1">Light single chair</CardDescription>
                   <p className="text-primary font-bold text-sm">{product.price}</p>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
           
           <div className="flex justify-center mt-6">
-            <button className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2">
+            <Button className="bg-green-500 hover:bg-green-600 text-white">
               <span>Explore all items</span>
               <FaArrowRight />
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -249,3 +269,4 @@ const ProductSection = () => {
 };
 
 export default ProductSection;
+

@@ -1,23 +1,28 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import styles from "@styles/Navbar.module.scss";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FaShoppingCart } from "react-icons/fa";
 
-const Navbar = () => {
-  const [menuActive, setMenuActive] = useState(false);
+interface NavItem {
+  path: string;
+  name: string;
+  isScroll: boolean;
+}
+
+const Navbar: React.FC = () => {
+  const [menuActive, setMenuActive] = useState<boolean>(false);
   const pathname = usePathname();
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { path: "/", name: "Home", isScroll: false },
     { path: "#products", name: "Products", isScroll: true },
     { path: "/about", name: "About", isScroll: false },
     { path: "/contact", name: "Contact", isScroll: false },
   ];
 
-  const handleNavClick = (item) => {
+  const handleNavClick = (item: NavItem) => {
     if (item.isScroll) {
       const element = document.getElementById('products');
       if (element) {
@@ -53,7 +58,7 @@ const Navbar = () => {
           </Link>
           
           <button 
-            onClick={() => handleNavClick({ path: "#products", isScroll: true })}
+            onClick={() => handleNavClick(navItems.find(item => item.path === "#products") || navItems[1])}
             className={styles.ctaButton}
           >
             Shop Now
@@ -94,7 +99,7 @@ const Navbar = () => {
             </div>
           </Link>
           <button
-            onClick={() => handleNavClick({ path: "#products", isScroll: true })}
+            onClick={() => handleNavClick(navItems.find(item => item.path === "#products") || navItems[1])}
             className={styles.ctaButton}
           >
             Shop Now
@@ -106,3 +111,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

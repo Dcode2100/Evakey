@@ -1,10 +1,9 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa";
 import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
-const AboutSection = () => {
+const AboutSection: React.FC = () => {
   const [ref, isVisible] = useScrollAnimation();
 
   return (
@@ -71,3 +70,4 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
+

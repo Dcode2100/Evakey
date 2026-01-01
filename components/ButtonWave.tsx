@@ -1,7 +1,12 @@
-
 import React from "react";
 
-const ButtonWave = ({ title, onClick, className = "" }) => {
+interface ButtonWaveProps {
+  title: string;
+  onClick?: () => void;
+  className?: string;
+}
+
+const ButtonWave: React.FC<ButtonWaveProps> = ({ title, onClick, className = "" }) => {
   return (
     <button
       onClick={onClick}
@@ -14,3 +19,4 @@ const ButtonWave = ({ title, onClick, className = "" }) => {
 };
 
 export default ButtonWave;
+

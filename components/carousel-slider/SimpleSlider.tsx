@@ -7,7 +7,7 @@ import 'swiper/css/pagination';
 import { Datas } from "./Carouselimg";
 import Image from "next/image";
 
-const SimpleSlider = () => {
+const SimpleSlider: React.FC = () => {
   return (
     <div className="w-full">
       <Swiper
@@ -43,3 +43,4 @@ const SimpleSlider = () => {
 };
 
 export default SimpleSlider;
+

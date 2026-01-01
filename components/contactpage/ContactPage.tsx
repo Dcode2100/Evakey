@@ -5,18 +5,30 @@ import Modal from "../Modal";
 import ButtonWave from "../ButtonWave";
 import Image from "next/image";
 
-const ContactPage = () => {
-  const [formData, setFormData] = useState({
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+interface CartItem {
+  title: string;
+  imagePath: string;
+}
+
+const ContactPage: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
     message: "",
   });
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const [cartItems, setCartItems] = useState([]);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     const handlePageRefresh = () => {
@@ -27,8 +39,9 @@ const ContactPage = () => {
     handlePageRefresh();
     window.addEventListener("beforeunload", handlePageRefresh);
 
-    const handleCartUpdate = (event) => {
-      console.log("Cart update event received:", event.detail);
+    const handleCartUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent<CartItem[]>;
+      console.log("Cart update event received:", customEvent.detail);
       const items = localStorage.getItem("cartItems");
       if (items) {
         setCartItems(JSON.parse(items));
@@ -43,15 +56,17 @@ const ContactPage = () => {
     };
   }, []);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = document.getElementById("sheetdb-form");
+    const form = document.getElementById("sheetdb-form") as HTMLFormElement;
+    if (!form) return;
+    
     const formdata = new FormData(form);
 
     cartItems.forEach(item => {
@@ -161,6 +176,7 @@ const ContactPage = () => {
                   handleInputChange={handleInputChange}
                   name="email"
                   value={formData.email}
+                  type="email"
                 />
                 <Input
                   className="text-base font-opensans"
@@ -168,6 +184,7 @@ const ContactPage = () => {
                   handleInputChange={handleInputChange}
                   name="phone"
                   value={formData.phone}
+                  type="tel"
                 />
               </div>
               
@@ -243,3 +260,4 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
+

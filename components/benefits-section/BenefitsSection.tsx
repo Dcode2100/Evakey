@@ -1,12 +1,21 @@
 "use client";
 import React from "react";
 import { FaMoneyBillWave, FaUndo, FaHeadset } from "react-icons/fa";
+import { IconType } from "react-icons";
 import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
-const BenefitsSection = () => {
+interface Benefit {
+  icon: IconType;
+  title: string;
+  description: string;
+  bgColor: string;
+  iconColor: string;
+}
+
+const BenefitsSection: React.FC = () => {
   const [ref, isVisible] = useScrollAnimation();
 
-  const benefits = [
+  const benefits: Benefit[] = [
     {
       icon: FaMoneyBillWave,
       title: "Payment Method",
@@ -40,22 +49,25 @@ const BenefitsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {benefits.map((benefit, index) => (
-            <div
-              key={index}
-              className="text-center space-y-4 p-6 rounded-lg"
-            >
-              <div className={`w-20 h-20 mx-auto ${benefit.bgColor} rounded-lg flex items-center justify-center`}>
-                <benefit.icon className={`text-3xl ${benefit.iconColor}`} />
+          {benefits.map((benefit, index) => {
+            const IconComponent = benefit.icon;
+            return (
+              <div
+                key={index}
+                className="text-center space-y-4 p-6 rounded-lg"
+              >
+                <div className={`w-20 h-20 mx-auto ${benefit.bgColor} rounded-lg flex items-center justify-center`}>
+                  <IconComponent className={`text-3xl ${benefit.iconColor}`} />
+                </div>
+                <h3 className="text-xl font-playfair font-semibold text-primary">
+                  {benefit.title}
+                </h3>
+                <p className="text-gray-700">
+                  {benefit.description}
+                </p>
               </div>
-              <h3 className="text-xl font-playfair font-semibold text-primary">
-                {benefit.title}
-              </h3>
-              <p className="text-gray-700">
-                {benefit.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -63,3 +75,4 @@ const BenefitsSection = () => {
 };
 
 export default BenefitsSection;
+

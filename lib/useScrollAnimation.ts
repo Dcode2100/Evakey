@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useScrollAnimation = (threshold = 0.1) => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+export const useScrollAnimation = (threshold: number = 0.1): [React.RefObject<HTMLElement | null>, boolean] => {
+  const ref = useRef<HTMLElement | null>(null);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,3 +31,4 @@ export const useScrollAnimation = (threshold = 0.1) => {
 
   return [ref, isVisible];
 };
+

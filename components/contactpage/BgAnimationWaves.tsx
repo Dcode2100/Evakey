@@ -1,8 +1,12 @@
 "use client";
 import React from 'react'
 
+interface BgAnimationWavesProps {
+  label?: string;
+  className?: string;
+}
 
-const BgAnimationWaves = ({label,className}) => {
+const BgAnimationWaves: React.FC<BgAnimationWavesProps> = ({label, className}) => {
     return (
         <section className='wave-animation Z-10'>
             <div className={`${className} text-label`}>{label}</div>
@@ -15,3 +19,4 @@ const BgAnimationWaves = ({label,className}) => {
 }
 
 export default BgAnimationWaves
+

@@ -1,9 +1,8 @@
 "use client";
 import React from 'react'
 
-const BgAnimation = () => {
+const BgAnimationSquare: React.FC = () => {
     return (
-
         <div className="area-animation" >
             <ul className="circles">
                 <li></li>
@@ -18,9 +17,10 @@ const BgAnimation = () => {
                 <li></li>
                 <li></li>
                 <li></li>
-
             </ul>
-        </div >)
+        </div>
+    )
 }
 
-export default BgAnimation
+export default BgAnimationSquare
+

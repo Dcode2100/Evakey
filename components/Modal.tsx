@@ -1,6 +1,12 @@
 import React from 'react';
 
-const Modal = ({ message, onClose, className }) => {
+interface ModalProps {
+  message: string;
+  onClose: () => void;
+  className?: string;
+}
+
+const Modal: React.FC<ModalProps> = ({ message, onClose, className }) => {
     return (
         <div className={`${className} fixed inset-0 flex items-center justify-center z-50`}>
             <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md flex justify-center flex-col items-center border border-secondary/20">
@@ -22,3 +28,4 @@ const Modal = ({ message, onClose, className }) => {
 };
 
 export default Modal;
+

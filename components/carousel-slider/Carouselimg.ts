@@ -1,4 +1,9 @@
-export const Datas = [
+export interface CarouselData {
+  id: number;
+  image: string;
+}
+
+export const Datas: CarouselData[] = [
   {
     id: 1,
     image:
@@ -15,3 +20,4 @@ export const Datas = [
       "https://rukminim2.flixcart.com/image/850/1000/xif0q/key-chain/n/q/v/panda-3d-attractive-design-keychain-for-car-bike-home-keys-pink-original-imaghwgm3epz5w4y.jpeg?q=90&crop=false",
   },
 ];
+

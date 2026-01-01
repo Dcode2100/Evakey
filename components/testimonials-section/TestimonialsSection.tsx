@@ -1,13 +1,23 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { FaQuoteLeft, FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
-const TestimonialsSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+interface Testimonial {
+  id: number;
+  name: string;
+  company: string;
+  content: string;
+  rating: number;
+  image: string;
+}
+
+const TestimonialsSection: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [ref, isVisible] = useScrollAnimation();
 
-  const testimonials = [
+  const testimonials: Testimonial[] = [
     {
       id: 1,
       name: "Sarah Johnson",
@@ -42,9 +52,9 @@ const TestimonialsSection = () => {
     }
   ];
 
-  const nextTestimonial = () => {
+  const nextTestimonial = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
+  }, [testimonials.length]);
 
   const prevTestimonial = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
@@ -55,7 +65,7 @@ const TestimonialsSection = () => {
       nextTestimonial();
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [nextTestimonial]);
 
   const currentTestimonial = testimonials[currentIndex];
 
@@ -67,7 +77,7 @@ const TestimonialsSection = () => {
             What Our Clients Say
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our valued clients have to say about their experience with Evakey.
+            Don&apos;t just take our word for it. Here&apos;s what our valued clients have to say about their experience with Evakey.
           </p>
         </div>
 
@@ -85,15 +95,16 @@ const TestimonialsSection = () => {
               </div>
               
               <p className="text-lg lg:text-xl text-gray-700 leading-relaxed italic">
-                "{currentTestimonial.content}"
+                &quot;{currentTestimonial.content}&quot;
               </p>
               
               <div className="flex items-center justify-center space-x-4">
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
-                  <img
+                <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200">
+                  <Image
                     src={currentTestimonial.image}
                     alt={currentTestimonial.name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
                 <div className="text-left">
@@ -144,3 +155,4 @@ const TestimonialsSection = () => {
 };
 
 export default TestimonialsSection;
+

@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import ButtonWave from "../ButtonWave";
 import SimpleSlider from "@components/carousel-slider/SimpleSlider";
 
-const HeroSection = () => {
+const HeroSection: React.FC = () => {
   const scrollToProducts = () => {
     const element = document.getElementById('products');
     if (element) {
@@ -43,7 +42,7 @@ const HeroSection = () => {
               <div className="pt-8 space-y-4">
                 <h3 className="text-xl font-playfair font-semibold text-primary">About EVA KEY</h3>
                 <p className="text-base lg:text-lg text-secondary font-opensans leading-relaxed max-w-xl">
-                  We're a global keychain company providing high-quality, custom keychains to customers worldwide. 
+                  We&apos;re a global keychain company providing high-quality, custom keychains to customers worldwide. 
                   Our commitment to excellence and innovation sets us apart in the industry.
                 </p>
               </div>
@@ -68,7 +67,7 @@ const HeroSection = () => {
               Brands That Trust Us
             </h3>
             <p className="text-lg text-secondary font-opensans max-w-2xl mx-auto">
-              We've earned the trust of leading brands worldwide through our commitment to quality and innovation.
+              We&apos;ve earned the trust of leading brands worldwide through our commitment to quality and innovation.
             </p>
           </div>
           
@@ -115,3 +114,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+

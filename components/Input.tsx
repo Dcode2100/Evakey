@@ -1,6 +1,15 @@
 import React from 'react';
 
-const Input = ({ label, handleInputChange, className, name, value, type = "text" }) => {
+interface InputProps {
+  label: string;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  name: string;
+  value: string;
+  type?: string;
+}
+
+const Input: React.FC<InputProps> = ({ label, handleInputChange, className, name, value, type = "text" }) => {
     return (
         <div className="space-y-2">
             <label className="block text-sm font-medium text-primary font-opensans">
@@ -20,3 +29,4 @@ const Input = ({ label, handleInputChange, className, name, value, type = "text"
 };
 
 export default Input;
+

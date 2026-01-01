@@ -3,7 +3,7 @@ import React from "react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaDribbble, FaTwitter, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { useScrollAnimation } from "@/lib/useScrollAnimation";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   const [ref, isVisible] = useScrollAnimation();
 
   return (
@@ -106,3 +106,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
