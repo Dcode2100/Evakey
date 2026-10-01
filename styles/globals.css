@@ -1,11 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   EVAKEY design tokens — palette lives here as RGB channels so
+   Tailwind can apply opacity and so the whole palette can be
+   swapped in one place. Default direction: "Atelier" (light).
+   ============================================================ */
+:root {
+  --c-primary: 13 62 58;        /* #0D3E3A deep teal */
+  --c-primary-light: 90 100 95; /* #5A645F */
+  --c-secondary: 90 100 95;     /* #5A645F muted text */
+  --c-brass: 169 119 47;        /* #A9772F single accent */
+  --c-bg: 246 243 236;          /* #F6F3EC warm bone */
+  --c-surface: 255 255 255;     /* card white */
+  --c-surface-2: 240 235 224;   /* #F0EBE0 tinted tile */
+  --c-ink: 24 34 32;            /* #182220 near-black */
+  --c-line: 228 221 207;        /* #E4DDCF hairline */
+  --c-a1: 237 231 218;          /* warm tint */
+  --c-a2: 233 238 236;          /* cool tint */
+  --c-a3: 240 236 227;
+  --c-a4: 243 238 228;
+  --c-a5: 246 243 236;          /* = page bg */
+}
+
+/* Alternate light palette — "Stone" (cool, minimal). Add
+   data-variant="stone" to <html> to preview. */
+:root[data-variant="stone"] {
+  --c-primary: 46 71 64;        /* #2E4740 slate-green */
+  --c-primary-light: 107 111 106;
+  --c-secondary: 107 111 106;   /* #6B6F6A */
+  --c-brass: 46 71 64;          /* monochrome: accent = primary */
+  --c-bg: 244 244 242;          /* #F4F4F2 */
+  --c-surface: 255 255 255;
+  --c-surface-2: 236 235 231;   /* #ECEBE7 */
+  --c-ink: 31 35 32;            /* #1F2320 */
+  --c-line: 226 225 220;        /* #E2E1DC */
+  --c-a1: 236 235 231;
+  --c-a2: 238 239 237;
+  --c-a3: 240 240 237;
+  --c-a4: 242 242 239;
+  --c-a5: 244 244 242;
+}
+
 body {
-  font-family: 'Roboto Flex', Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer utilities {
@@ -83,28 +126,66 @@ h1 {
   margin: 0; /*Add This*/
   vertical-align: top;
 }
-:root {
-  margin: 0;
-  padding: 0;
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  border: 0;
-  font-family: "Poppins", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset anchor targets so they aren't hidden behind the sticky 5rem navbar */
+section[id],
+[id].scroll-target {
+  scroll-margin-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 .smooth-scroll {
   scroll-behavior: smooth;
 }
 
-body {
-  background-color: #e6fcfe;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .brand_logo {
   display: block;
   position: relative;
+}
+
+/* Tasteful scroll reveal used by useScrollAnimation (.section-animate → .animate) */
+.section-animate {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+.section-animate.animate {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-animate {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Headings use the display serif */
+h1, h2, h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* Selection */
+::selection {
+  background: rgb(var(--c-primary) / 0.14);
 }
 
 /* Custom class to hide scrollbars */

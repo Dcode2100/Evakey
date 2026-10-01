@@ -1,20 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
-import ButtonWave from "../ButtonWave";
-import Image from "next/image";
 
 interface FormData {
   name: string;
   email: string;
   phone: string;
   message: string;
-}
-
-interface CartItem {
-  title: string;
-  imagePath: string;
 }
 
 const ContactPage: React.FC = () => {
@@ -28,34 +21,6 @@ const ContactPage: React.FC = () => {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-  useEffect(() => {
-    const handlePageRefresh = () => {
-      localStorage.removeItem("cartItems");
-      setCartItems([]);
-    };
-
-    handlePageRefresh();
-    window.addEventListener("beforeunload", handlePageRefresh);
-
-    const handleCartUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent<CartItem[]>;
-      console.log("Cart update event received:", customEvent.detail);
-      const items = localStorage.getItem("cartItems");
-      if (items) {
-        setCartItems(JSON.parse(items));
-      }
-    };
-
-    window.addEventListener("cartUpdated", handleCartUpdate);
-
-    return () => {
-      window.removeEventListener("beforeunload", handlePageRefresh);
-      window.removeEventListener("cartUpdated", handleCartUpdate);
-    };
-  }, []);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -68,10 +33,6 @@ const ContactPage: React.FC = () => {
     if (!form) return;
     
     const formdata = new FormData(form);
-
-    cartItems.forEach(item => {
-        formdata.append("items", item.title); 
-    });
 
     fetch("https://sheetdb.io/api/v1/lxgxqk4f57be4", {
       method: "POST",
@@ -99,18 +60,19 @@ const ContactPage: React.FC = () => {
   return (
     <section
       id="contact"
-      className="relative w-full bg-gradient-to-br from-primary to-primary-light py-20 lg:py-32 overflow-hidden"
+      className="relative w-full overflow-hidden bg-primary py-20 lg:py-28"
     >
-      <div className="absolute inset-0 bg-[url('/bg-contact.webp')] bg-cover bg-center opacity-10"></div>
-      
-      <div className="relative container mx-auto px-8 lg:px-16 xl:px-20">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20">
-          <div className="flex flex-col gap-8 lg:pt-8">
-            <div className="space-y-6">
-              <h2 className="text-4xl lg:text-5xl xl:text-6xl font-playfair font-semibold text-white leading-tight">
-                Let&apos;s talk
+      <div className="absolute inset-0 bg-[url('/bg-contact.webp')] bg-cover bg-center opacity-[0.07]"></div>
+
+      <div className="relative container mx-auto px-6 lg:px-8">
+        <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
+          <div className="flex flex-col gap-8 lg:pt-4">
+            <div className="space-y-5">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">Let&apos;s talk</span>
+              <h2 className="font-playfair text-3xl font-bold leading-tight text-white lg:text-5xl">
+                Build your next gift programme
               </h2>
-              <p className="text-lg lg:text-xl text-white/90 font-opensans leading-relaxed max-w-lg">
+              <p className="max-w-lg text-base leading-relaxed text-white/85">
                 Looking to make a lasting impression with branded promotional
                 products for your business? We&apos;re here to turn your ideas into
                 reality. Get in touch with us today.
@@ -118,30 +80,24 @@ const ContactPage: React.FC = () => {
             </div>
             
             <div className="space-y-6">
-              <div className="email space-y-3">
-                <h3 className="text-2xl lg:text-3xl font-playfair font-semibold text-white">Email</h3>
+              <div className="space-y-2">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Email</h3>
                 <a
-                  className="text-lg text-white/90 font-opensans hover:text-white transition-colors duration-300"
+                  className="text-base text-white/90 transition-colors hover:text-white"
                   href="mailto:kshemkariplastic@gmail.com"
                 >
                   kshemkariplastic@gmail.com
                 </a>
               </div>
-              
-              <div className="phone space-y-3">
-                <h3 className="text-2xl lg:text-3xl font-playfair font-semibold text-white">Phone</h3>
-                <div className="space-y-2">
-                  <a
-                    className="block text-lg text-white/90 font-opensans hover:text-white transition-colors duration-300"
-                    href="tel:9892552558"
-                  >
-                    <span className="font-light">Office</span> - 9892552558
+
+              <div className="space-y-2">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Phone</h3>
+                <div className="space-y-1.5">
+                  <a className="block text-base text-white/90 transition-colors hover:text-white" href="tel:9892552558">
+                    <span className="text-white/60">Office</span> — 9892552558
                   </a>
-                  <a
-                    className="block text-lg text-white/90 font-opensans hover:text-white transition-colors duration-300"
-                    href="tel:8104780513"
-                  >
-                    <span className="font-light">Phone</span> - 8104780513
+                  <a className="block text-base text-white/90 transition-colors hover:text-white" href="tel:8104780513">
+                    <span className="text-white/60">Phone</span> — 8104780513
                   </a>
                 </div>
               </div>
@@ -189,55 +145,6 @@ const ContactPage: React.FC = () => {
               </div>
               
               <div className="space-y-3">
-                <p className="text-lg font-opensans font-medium text-primary">Your Quotation</p>
-                <div className="flex flex-wrap gap-4 p-6 border-2 border-secondary/30 rounded-xl min-h-[120px] bg-accent-5/50">
-                  {cartItems.length > 0 ? (
-                    cartItems.map((item, index) => (
-                      <div
-                        key={index}
-                        className="group relative flex flex-col items-center"
-                      >
-                        <div className="relative w-20 h-20">
-                          <Image
-                            src={item.imagePath}
-                            alt={item.title}
-                            fill
-                            className="object-contain"
-                          />
-                          <button
-                            onClick={() => {
-                              const updatedCart = cartItems.filter(
-                                (_, i) => i !== index
-                              );
-                              setCartItems(updatedCart);
-                              localStorage.setItem(
-                                "cartItems",
-                                JSON.stringify(updatedCart)
-                              );
-                              const event = new CustomEvent("cartUpdated", {
-                                detail: updatedCart,
-                              });
-                              window.dispatchEvent(event);
-                            }}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-600 transform hover:scale-110"
-                          >
-                            ×
-                          </button>
-                        </div>
-                        <p className="text-sm mt-2 text-center text-primary font-opensans max-w-[80px] break-words">
-                          {item.title}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-secondary font-opensans text-center w-full py-8">
-                      No items in cart
-                    </p>
-                  )}
-                </div>
-              </div>
-              
-              <div className="space-y-3">
                 <textarea
                   name="message"
                   className="w-full text-primary font-opensans bg-transparent border-2 border-secondary/30 focus:border-primary focus:outline-none rounded-lg p-4 h-32 resize-none transition-all duration-300 placeholder:text-secondary/60"
@@ -248,8 +155,13 @@ const ContactPage: React.FC = () => {
                 ></textarea>
               </div>
               
-              <div className="w-full flex justify-end pt-4">
-                <ButtonWave title="Submit" />
+              <div className="w-full pt-2">
+                <button
+                  type="submit"
+                  className="h-12 w-full rounded-lg bg-primary font-semibold text-white transition hover:bg-primary/90"
+                >
+                  Send message
+                </button>
               </div>
             </form>
           </div>

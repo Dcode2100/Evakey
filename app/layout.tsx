@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import "@styles/globals.css";
 
 import Navbar from "@components/Navbar";
-import ContactPage from "@components/contactpage/ContactPage";
+import SiteBottom from "@components/SiteBottom";
+import { EnquiryProvider } from "@/lib/enquiry-store";
 
 export const metadata: Metadata = {
   title: "EVAKEY - Premium Keychains & Promotional Products",
-  description: "Discover amazing keychains and promotional products for your company. Premium quality custom keychains crafted with excellence.",
+  description: "Custom keychains, bottles, bags, stationery and corporate gifts branded with your logo. Browse the catalogue and send an enquiry.",
 };
 
 export default function RootLayout({
@@ -18,15 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <div className="relative w-full overflow-hidden">
-          <div>
-            <Navbar />
-          </div>
+        <EnquiryProvider>
+        <div className="relative w-full overflow-x-clip">
+          <Navbar />
           {children}
-          <div>
-            <ContactPage />
-          </div>
+          <SiteBottom />
         </div>
+        </EnquiryProvider>
       </body>
     </html>
   );

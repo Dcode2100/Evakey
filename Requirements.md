@@ -8,7 +8,7 @@ What are we trying to achieve?
 
 - Landing page for EVAKEY
 - product catalog
-- contact page -  // remove the Your Quotation and cart part and remove this comment then only 
+- contact page 
 
 # Expected Features
 

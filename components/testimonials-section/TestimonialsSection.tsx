@@ -70,80 +70,72 @@ const TestimonialsSection: React.FC = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section ref={ref} id="testimonials" className={`min-h-screen bg-gray-50 py-20 section-animate ${isVisible ? 'animate' : ''}`}>
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-playfair font-bold text-primary mb-6">
-            What Our Clients Say
+    <section ref={ref} id="testimonials" className={`bg-surface py-20 section-animate ${isVisible ? 'animate' : ''}`}>
+      <div className="container mx-auto px-6 lg:px-8">
+        <div className="mb-12 text-center">
+          <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brass">Client notes</span>
+          <h2 className="mt-3 font-playfair text-3xl font-bold text-primary lg:text-4xl">
+            What our clients say
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. Here&apos;s what our valued clients have to say about their experience with Evakey.
-          </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12 relative">
-            <div className="absolute top-8 left-8 text-6xl text-primary/20">
+        <div className="mx-auto max-w-3xl">
+          <div className="relative rounded-2xl border border-line bg-background p-8 lg:p-12">
+            <div className="absolute left-7 top-7 text-4xl text-brass/25">
               <FaQuoteLeft />
             </div>
-            
-            <div className="text-center space-y-8">
-              <div className="flex justify-center space-x-1">
+
+            <div className="space-y-7 px-6 text-center lg:px-12">
+              <div className="flex justify-center gap-1">
                 {[...Array(currentTestimonial.rating)].map((_, i) => (
-                  <FaStar key={i} className="text-yellow-400 text-xl" />
+                  <FaStar key={i} className="text-lg text-brass" />
                 ))}
               </div>
-              
-              <p className="text-lg lg:text-xl text-gray-700 leading-relaxed italic">
+
+              <p className="font-playfair text-xl italic leading-relaxed text-ink lg:text-2xl">
                 &quot;{currentTestimonial.content}&quot;
               </p>
-              
-              <div className="flex items-center justify-center space-x-4">
-                <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200">
-                  <Image
-                    src={currentTestimonial.image}
-                    alt={currentTestimonial.name}
-                    fill
-                    className="object-cover"
-                  />
+
+              <div className="flex items-center justify-center gap-4">
+                <div className="relative h-14 w-14 overflow-hidden rounded-full bg-surface-2">
+                  <Image src={currentTestimonial.image} alt={currentTestimonial.name} fill className="object-cover" />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-semibold text-gray-800 text-lg">
-                    {currentTestimonial.name}
-                  </h4>
-                  <p className="text-gray-600">
-                    {currentTestimonial.company}
-                  </p>
+                  <h4 className="font-semibold text-ink">{currentTestimonial.name}</h4>
+                  <p className="text-sm text-secondary">{currentTestimonial.company}</p>
                 </div>
               </div>
             </div>
-            
-            <div className="absolute top-1/2 -translate-y-1/2 left-4 lg:left-8">
+
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 lg:left-5">
               <button
                 onClick={prevTestimonial}
-                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+                aria-label="Previous testimonial"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-primary transition hover:border-primary"
               >
-                <FaChevronLeft className="text-primary" />
+                <FaChevronLeft />
               </button>
             </div>
-            
-            <div className="absolute top-1/2 -translate-y-1/2 right-4 lg:right-8">
+
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 lg:right-5">
               <button
                 onClick={nextTestimonial}
-                className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+                aria-label="Next testimonial"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-primary transition hover:border-primary"
               >
-                <FaChevronRight className="text-primary" />
+                <FaChevronRight />
               </button>
             </div>
           </div>
-          
-          <div className="flex justify-center mt-8 space-x-2">
+
+          <div className="mt-7 flex justify-center gap-2">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentIndex ? "bg-primary" : "bg-gray-300"
+                aria-label={`Show testimonial ${index + 1}`}
+                className={`h-2 rounded-full transition-all ${
+                  index === currentIndex ? "w-6 bg-primary" : "w-2 bg-line"
                 }`}
               />
             ))}

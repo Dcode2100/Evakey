@@ -3,34 +3,46 @@ import React, { useState } from "react";
 import styles from "@styles/Navbar.module.scss";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaClipboardList } from "react-icons/fa";
+import { useEnquiry } from "@/lib/enquiry-store";
 
 interface NavItem {
-  path: string;
+  href: string;
   name: string;
-  isScroll: boolean;
 }
+
+const navItems: NavItem[] = [
+  { href: "/", name: "Home" },
+  { href: "/products", name: "Products" },
+  { href: "/#how-it-works", name: "How it works" },
+  { href: "/#about", name: "About" },
+  { href: "/#contact", name: "Contact" },
+];
 
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false);
   const pathname = usePathname();
+  const { count } = useEnquiry();
 
-  const navItems: NavItem[] = [
-    { path: "/", name: "Home", isScroll: false },
-    { path: "#products", name: "Products", isScroll: true },
-    { path: "/about", name: "About", isScroll: false },
-    { path: "/contact", name: "Contact", isScroll: false },
-  ];
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : !href.includes("#") && pathname.startsWith(href);
 
-  const handleNavClick = (item: NavItem) => {
-    if (item.isScroll) {
-      const element = document.getElementById('products');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-    setMenuActive(false);
-  };
+  const EnquiryLink = ({ mobile = false }: { mobile?: boolean }) => (
+    <Link
+      href="/enquiry"
+      onClick={() => setMenuActive(false)}
+      className={`${mobile ? styles.mobileLink : styles.link} inline-flex items-center gap-2`}
+      aria-label={`Enquiry list, ${count} item${count === 1 ? "" : "s"}`}
+    >
+      <FaClipboardList className="h-5 w-5" />
+      {mobile && <span>Enquiry list</span>}
+      {count > 0 && (
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-white">
+          {count}
+        </span>
+      )}
+    </Link>
+  );
 
   return (
     <nav className={styles.navbar}>
@@ -40,29 +52,21 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className={styles.navLinks}>
-          {navItems.map((item) => {
-            const isActive = item.path === pathname;
-            return (
-              <button
-                key={item.path}
-                onClick={() => handleNavClick(item)}
-                className={`${styles.link} ${isActive ? 'text-primary' : ''}`}
-              >
-                {item.name}
-              </button>
-            );
-          })}
-          
-          <Link href="/cart" className={styles.link}>
-            <FaShoppingCart className="w-5 h-5" />
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`${styles.link} ${isActive(item.href) ? "text-primary font-semibold" : ""}`}
+            >
+              {item.name}
+            </Link>
+          ))}
+
+          <EnquiryLink />
+
+          <Link href="/enquiry" className={styles.ctaButton}>
+            Get a quote
           </Link>
-          
-          <button 
-            onClick={() => handleNavClick(navItems.find(item => item.path === "#products") || navItems[1])}
-            className={styles.ctaButton}
-          >
-            Shop Now
-          </button>
         </div>
 
         <button
@@ -70,6 +74,7 @@ const Navbar: React.FC = () => {
           onClick={() => setMenuActive(!menuActive)}
           type="button"
           aria-label="Toggle menu"
+          aria-expanded={menuActive}
         >
           <div className={styles.line}></div>
           <div className={styles.line}></div>
@@ -80,30 +85,14 @@ const Navbar: React.FC = () => {
       <div className={`${styles.mobileMenu} ${menuActive ? styles.open : ""}`}>
         <div className={styles.mobileNavLinks}>
           {navItems.map((item) => (
-            <button
-              key={item.path}
-              onClick={() => handleNavClick(item)}
-              className={styles.mobileLink}
-            >
+            <Link key={item.href} href={item.href} onClick={() => setMenuActive(false)} className={styles.mobileLink}>
               {item.name}
-            </button>
+            </Link>
           ))}
-          <Link
-            href="/cart"
-            className={styles.mobileLink}
-            onClick={() => setMenuActive(false)}
-          >
-            <div className="flex items-center gap-2">
-              <FaShoppingCart className="w-5 h-5" />
-              Cart
-            </div>
+          <EnquiryLink mobile />
+          <Link href="/enquiry" onClick={() => setMenuActive(false)} className={`${styles.ctaButton} text-center`}>
+            Get a quote
           </Link>
-          <button
-            onClick={() => handleNavClick(navItems.find(item => item.path === "#products") || navItems[1])}
-            className={styles.ctaButton}
-          >
-            Shop Now
-          </button>
         </div>
       </div>
     </nav>
@@ -111,4 +100,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
